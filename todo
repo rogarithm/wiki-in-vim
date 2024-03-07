@@ -15,7 +15,10 @@ vim에서 쓸 수 있는 wiki 구현하기
  - 해당 디렉토리를 위키로 쓰기 위해선 먼저 인덱스 파일을 만들어야 한다
 - 위키 파일 생성
  - 위키 링크 형식의 이름 위에 커서를 두고 단축키를 누르면 그 이름에 대한 파일을 만든다
-  => Send a Word under Cursor to External command
+  - 검색어: Send a Word under Cursor to External command
+  - 초기 구현: nnoremap <F2> :execute ':!touch ./' . shellescape(expand('<cword>')) . '.wiki'<CR>
+  - 커서 아래 있는 단어가 카멜 케이스인 경우에만 위키 파일을 만든다
+   - cword가 카멜케이스 형식을 따르는지 조건문으로 체크할 수 있다
  - 파일을 만들려는 디렉토리가 존재하지 않으면, 새로 만든다. 중간 경로에 대해서도 마찬가지
 - 링크에 연결된 파일로 이동
  - wiki 형식 링크 위에 커서를 올리고 특정 키를 눌렀을 때 그 링크에 맞는 파일로 이동하기
