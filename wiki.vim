@@ -5,4 +5,8 @@ function! CreateWikiPage(word)
   endif
 endfunction
 
+function! WrapWithBrackets(link)
+endfunction
+
 nnoremap <F3> :call CreateWikiPage(expand('<cword>'))<CR>
+nnoremap <F4> :call WrapWithBrackets(expand('<cword>'))<CR>
