@@ -12,5 +12,23 @@ function! WrapWithBrackets()
   execute "normal! " . "i[:\<C-r>z:]\<Esc>"
 endfunction
 
+function! WarpToLink()
+  " 위키 링크 형식이 맞는지 확인하기 위해 커서 주변 문자열을 z 레지스터에 저장한다
+  execute "normal! " . "viW\"zy"
+  let formattedLink = getreg('z')
+
+  let linkPattern = '\v\[:<([A-Z][a-z]+)+:\]'
+  let linkFilePattern = '\v<([A-Z][a-z]+)+'
+  " 주어진 문자열이 위키 링크 형식이면
+  if formattedLink =~# linkPattern
+    let fileName = matchstr("[:CamelCasedKeyword:]", linkFilePattern)
+    " 그 위키 파일을 연다
+    execute ":e " . fileName . ".wiki"
+  else
+    echom 'Invalid format of wiki link!'
+  endif
+endfunction
+
 nnoremap <F3> :call CreateWikiPage(expand('<cword>'))<CR>
 nnoremap <F4> :call WrapWithBrackets()<CR>
+nnoremap <F5> :call WarpToLink()<CR>
