@@ -1,3 +1,12 @@
+function! SumAllUp()
+  let exists = system('ls AndThere.wiki')
+  if v:shell_error
+    echo 'fail!'
+  else
+    echo 'success!'
+  endif
+endfunction
+
 function! CreateWikiPage(word)
   let pattern = '\v<([A-Z][a-z]+)+'
   if a:word =~# pattern
@@ -32,3 +41,4 @@ endfunction
 nnoremap <F3> :call CreateWikiPage(expand('<cword>'))<CR>
 nnoremap <F4> :call WrapWithBrackets()<CR>
 nnoremap <F5> :call WarpToLink()<CR>
+nnoremap <F6> :call SumAllUp()<CR>
