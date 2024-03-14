@@ -33,6 +33,7 @@ function! CreateWikiPage(word)
   endif
   execute ':!touch ./' . shellescape(a:word) . '.wiki'
   call WrapWithBrackets()
+  execute ':w ' . expand('%')
 endfunction
 
 
