@@ -1,4 +1,6 @@
 function! CheckFileExists(word)
+  " ex. 입력이 ExamplePage일 경우, 현재 디렉토리에
+  " ExamplePage.wiki 파일이 있는지 확인
   let exists = system('ls ' . a:word . '.wiki')
   if v:shell_error
     return 'file not exists'
@@ -8,13 +10,16 @@ function! CheckFileExists(word)
 endfunction
 
 function! WrapWithBrackets()
-  " 포맷팅할 링크 문자열을 z 레지스터에 저장 후 지운다
+  " 주어진 문자열을 링크 형식으로 포맷팅
+  " 링크 형식: [:ExamplePage:]
   execute "normal! " . "viw\"zx"
-  " 포맷팅해서 다시 입력한다
   execute "normal! " . "i[:\<C-r>z:]\<Esc>"
 endfunction
 
 function! CreateWikiPage(word)
+  " 위키 페이지 생성
+  " 페이지를 만들기 전에 주어진 문자열이 카멜 케이스인지,
+  " 해당 위키 파일이 이미 있는지 확인
   let pattern = '\v<([A-Z][a-z]+)+'
   let file_exists = CheckFileExists(a:word)
   echo file_exists
@@ -32,6 +37,9 @@ endfunction
 
 
 function! WarpToLink()
+  " 위키 페이지로 이동
+  " 페이지로 이동하기 전에 주어진 문자열이 링크 형식인지,
+  " 해당 위키 파일이 이미 있는지 확인
   execute "normal! " . "viW\"zy"
   let formattedLink = getreg('z')
 
@@ -44,7 +52,6 @@ function! WarpToLink()
   endif
 
   let fileName = matchstr(formattedLink, linkFilePattern)
-  echom "FILENAME: " . fileName
   let file_exists = CheckFileExists(fileName)
   if file_exists == 'file not exists'
     echom 'file not exists'
@@ -55,6 +62,4 @@ function! WarpToLink()
 endfunction
 
 nnoremap <F3> :call CreateWikiPage(expand('<cword>'))<CR>
-nnoremap <F4> :call WrapWithBrackets()<CR>
 nnoremap <F5> :call WarpToLink()<CR>
-nnoremap <F6> :call SumAllUp(expand('<cword>'))<CR>
