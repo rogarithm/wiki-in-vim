@@ -34,6 +34,7 @@ function! CreateWikiPage(word)
   execute ':!touch ./' . shellescape(a:word) . '.wiki'
   call WrapWithBrackets()
   execute ':w ' . expand('%')
+  call WarpToLink('[:' . a:word . ':]')
 endfunction
 
 
