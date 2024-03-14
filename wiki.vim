@@ -20,7 +20,7 @@ function! CreateWikiPage(word)
   " 위키 페이지 생성
   " 페이지를 만들기 전에 주어진 문자열이 카멜 케이스인지,
   " 해당 위키 파일이 이미 있는지 확인
-  let pattern = '\v<([A-Z][a-z]+)+'
+  let pattern = '\v([A-Z][a-z]+)+'
   let file_exists = CheckFileExists(a:word)
   echo file_exists
   if a:word !~# pattern
@@ -42,8 +42,8 @@ function! WarpToLink(formatted_link)
   " 페이지로 이동하기 전에 주어진 문자열이 링크 형식인지,
   " 해당 위키 파일이 이미 있는지 확인
 
-  let link_pattern = '\v\[:<([A-Z][a-z]+)+:\]'
-  let link_file_pattern = '\v<([A-Z][a-z]+)+'
+  let link_pattern = '\v\[\:([A-Z][a-z]+)+\:\]'
+  let link_file_pattern = '\v([A-Z][a-z]+)+'
 
   if a:formatted_link !~# link_pattern
     echom 'Invalid format of wiki link!'
