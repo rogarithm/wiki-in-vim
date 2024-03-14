@@ -1,7 +1,7 @@
 function! CheckFileExists(word)
   " ex. 입력이 ExamplePage일 경우, 현재 디렉토리에
   " ExamplePage.wiki 파일이 있는지 확인
-  let exists = system('ls ' . a:word . '.wiki')
+  silent execute 'ls ' . a:word . '.wiki'
   if v:shell_error
     return 'file not exists'
   else
@@ -31,9 +31,9 @@ function! CreateWikiPage(word)
     echom 'file already exists'
     return
   endif
-  execute ':!touch ./' . shellescape(a:word) . '.wiki'
+  silent execute ':!touch ./' . shellescape(a:word) . '.wiki'
   call WrapWithBrackets()
-  execute ':w ' . expand('%')
+  silent execute ':w ' . expand('%')
   call WarpToLink('[:' . a:word . ':]')
 endfunction
 
