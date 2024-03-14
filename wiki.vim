@@ -50,19 +50,19 @@ function! WarpToLink(formatted_link)
   let link_file_pattern = '\v([A-Z][a-z]+)+'
 
   if a:formatted_link !~# link_pattern
-    echom 'Invalid format of wiki link!'
+    echom 'WarpToLink: Invalid format of wiki link!'
     return
   endif
 
   let file_name = matchstr(a:formatted_link, link_file_pattern)
   let file_exists = CheckFileExists(file_name)
   if file_exists == 'file not exists'
-    echom 'file not exists'
+    echom 'WarpToLink: file not exists'
     return
   endif
 
   execute ":e " . file_name . ".wiki"
 endfunction
 
-nnoremap <F3> :call CreateWikiPage(expand('<cword>'))<CR>
-nnoremap <F5> :call WarpToLink(expand('<cWORD>'))<CR>
+nnoremap <C-J> :call CreateWikiPage(expand('<cword>'))<CR>
+nnoremap <C-]> :call WarpToLink(expand('<cWORD>'))<CR>
