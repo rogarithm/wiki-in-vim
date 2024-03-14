@@ -3,8 +3,11 @@ function! CheckFileExists(word)
   " ExamplePage.wiki 파일이 있는지 확인
   silent execute 'ls ' . a:word . '.wiki'
   if v:shell_error
+    " if문은 0이 아닌 값을 입력받았을 때 참이다.
+    " 쉘 명령에 실패했을 때 v:shell_error 값으로 0이 아닌 값을 반환한다
     return 'file not exists'
   else
+    " 쉘 명령에 성공했을 때 v:shell_error 값으로 0을 반환한다
     return 'file already exists'
   endif
 endfunction
