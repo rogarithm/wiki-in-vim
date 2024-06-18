@@ -15,8 +15,9 @@ endfunction
 function! WrapWithBrackets()
   " 주어진 문자열을 링크 형식으로 포맷팅
   " 링크 형식: [:ExamplePage:]
-  execute "normal! " . "viw\"zx"
-  execute "normal! " . "i[:\<C-r>z:]\<Esc>"
+  let store_wiki_name = "viw\"z"
+  let replace_with_formatted_wiki_name = "s[:\<C-r>z:]\<Esc>"
+  execute "normal! " . store_wiki_name . replace_with_formatted_wiki_name
 endfunction
 
 function! CreateWikiPage(word)
