@@ -1,7 +1,7 @@
 function! CheckFileExists(word)
   " ex. 입력이 ExamplePage일 경우, 현재 디렉토리에
   " ExamplePage.wiki 파일이 있는지 확인
-  silent execute ':!ls ' . a:word . '.wiki'
+  silent execute ':!ls ./wiki/' . a:word . '.wiki'
   if v:shell_error
     " if문은 0이 아닌 값을 입력받았을 때 참이다.
     " 쉘 명령에 실패했을 때 v:shell_error 값으로 0이 아닌 값을 반환한다
@@ -34,7 +34,7 @@ function! CreateWikiPage(word)
     echom 'file already exists'
     return
   endif
-  silent execute ':!touch ./' . shellescape(a:word) . '.wiki'
+  silent execute ':!touch ./wiki/' . shellescape(a:word) . '.wiki'
   call WrapWithBrackets()
   silent execute ':w ' . expand('%')
   call WarpToLink('[:' . a:word . ':]')
@@ -61,7 +61,7 @@ function! WarpToLink(formatted_link)
     return
   endif
 
-  execute ":e " . file_name . ".wiki"
+  execute ":e ./wiki/" . file_name . ".wiki"
 endfunction
 
 nnoremap <C-J> :call CreateWikiPage(expand('<cword>'))<CR>
