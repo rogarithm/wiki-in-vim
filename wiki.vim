@@ -20,6 +20,14 @@ function! WrapWithBrackets()
   execute "normal! " . store_wiki_name . replace_with_formatted_wiki_name
 endfunction
 
+function! UnwrapBrackets(word)
+  " 링크 형식 문자열에서 [:, :] 삭제
+  " [:ExamplePage:] -> ExamplePage
+  let link_format_wiki_name = a:word
+  let brackets_unwrapped = substitute(substitute(link_format_wiki_name, '^\[:', '', ''), ':\]$', '', '')
+  return brackets_unwrapped
+endfunction
+
 function! CreateWikiPage(word)
   " 위키 페이지 생성
   " 페이지를 만들기 전에 주어진 문자열이 카멜 케이스인지,
@@ -41,6 +49,32 @@ function! CreateWikiPage(word)
   call WarpToLink('[:' . a:word . ':]')
 endfunction
 
+"명령 실행 시 커서 위에 있는 단어를 기존 파일 이름으로 받아야 한다
+"그리고 프롬프트를 띄워서 수정할 파일 이름을 입력받을 수 있어야 한다
+function! RenameWikiPage(prev_file_name_with_brackets, edited_file_name)
+  let prev_file_name = UnwrapBrackets(a:prev_file_name_with_brackets)
+  " 해당 위키 파일이 이미 있는지 확인
+  let camel_case = '\v([A-Z][a-z]+)+'
+  if a:edited_file_name !~# camel_case
+    echom 'invalid wiki file name: use camel case!'
+    return
+  endif
+
+  let file_exists = CheckFileExists(prev_file_name)
+  if file_exists == 'file not exists'
+    echom 'attempt to rename wiki file that does not exists. exit...'
+    return
+  endif
+
+  " 위키 페이지 이름 수정
+  silent execute ':!mv ./wiki/' . prev_file_name . '.wiki ./wiki/' . a:edited_file_name . '.wiki'
+
+  " 인덱스 페이지의 위키 링크를 수정할 링크명으로 바꾼다
+  execute "normal! " . "viwx"
+  execute "normal! i" . a:edited_file_name
+
+  silent execute ':w ' . expand('%')
+endfunction
 
 function! WarpToLink(formatted_link)
   " 위키 페이지로 이동
@@ -65,5 +99,6 @@ function! WarpToLink(formatted_link)
   execute ":e ./wiki/" . file_name . ".wiki"
 endfunction
 
-nnoremap <C-J> :call CreateWikiPage(expand('<cword>'))<CR>
-nnoremap <C-]> :call WarpToLink(expand('<cWORD>'))<CR>
+nnoremap <leader>wc :call CreateWikiPage(expand('<cword>'))<CR>
+nnoremap <leader>ww :call WarpToLink(expand('<cWORD>'))<CR>
+nnoremap <leader>wr :call RenameWikiPage(expand('<cWORD>'), input("type new file name: "))<CR>
