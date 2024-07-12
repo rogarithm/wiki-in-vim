@@ -60,6 +60,11 @@ function! RenameWikiPage(prev_wrapped_name, new_name)
     return
   endif
 
+  if (CheckFileExists(a:new_name) == 'file already exists')
+    echom 'wiki file with new name already exists. exit...'
+    return
+  endif
+
   let file_exists = CheckFileExists(prev_name)
   if file_exists == 'file not exists'
     echom 'attempt to rename wiki file that does not exists. exit...'
