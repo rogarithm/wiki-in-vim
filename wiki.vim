@@ -51,27 +51,27 @@ endfunction
 
 "명령 실행 시 커서 위에 있는 단어를 기존 파일 이름으로 받아야 한다
 "그리고 프롬프트를 띄워서 수정할 파일 이름을 입력받을 수 있어야 한다
-function! RenameWikiPage(prev_file_name_with_brackets, edited_file_name)
-  let prev_file_name = UnwrapBrackets(a:prev_file_name_with_brackets)
+function! RenameWikiPage(prev_wrapped_name, new_name)
+  let prev_name = UnwrapBrackets(a:prev_wrapped_name)
   " 해당 위키 파일이 이미 있는지 확인
   let camel_case = '\v([A-Z][a-z]+)+'
-  if a:edited_file_name !~# camel_case
+  if a:new_name !~# camel_case
     echom 'invalid wiki file name: use camel case!'
     return
   endif
 
-  let file_exists = CheckFileExists(prev_file_name)
+  let file_exists = CheckFileExists(prev_name)
   if file_exists == 'file not exists'
     echom 'attempt to rename wiki file that does not exists. exit...'
     return
   endif
 
   " 위키 페이지 이름 수정
-  silent execute ':!mv ./wiki/' . prev_file_name . '.wiki ./wiki/' . a:edited_file_name . '.wiki'
+  silent execute ':!mv ./wiki/' . prev_name . '.wiki ./wiki/' . a:new_name . '.wiki'
 
   " 인덱스 페이지의 위키 링크를 수정할 링크명으로 바꾼다
   execute "normal! " . "viwx"
-  execute "normal! i" . a:edited_file_name
+  execute "normal! i" . a:new_name
 
   silent execute ':w ' . expand('%')
 endfunction
